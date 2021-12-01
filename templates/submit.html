@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+
+<div class="jumbotron">
+<h3 class="display-4">Still on my youtube video downloader</h3>
+</div>
+<div class="col-lg-6 mx-auto">
+    <div class="card p-2">
+        <form action="linksubmit" method="get">
+<div class="form-group">
+  <label for=""></label>
+  <input type="text"  class="form-control" value="{{url}}" aria-describedby="helpId">
+ 
+</div> 
+<!-- <button class="btn btn-primary">Search</button> -->
+ </form>
+ <div>
+        <iframe src="{{embed}}" frameborder="0"></iframe>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Resolution</th>
+                <th>Download</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for x in res  %}
+            <tr>
+                <td>
+                    {{x}}
+                </td>
+                <td><a href="{{x}}{{url2}}"> Download</a></td>
+            </tr> 
+             {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+    
+</div>
+{% endblock content %}
