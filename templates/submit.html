@@ -33,7 +33,7 @@
                 <td>
                     {{x}}
                 </td>
-                <td><a href="{{x}}{{url2}}"> Download</a></td>
+                <td><a href="{{x}}{{url2}}" onclick="popup()"> Download</a></td>
             </tr> 
              {% endfor %}
         </tbody>
@@ -42,4 +42,9 @@
 
     
 </div>
+<script>
+function popup() {
+    alert('Please wait, your video has started downloading...')
+}
+</script>
 {% endblock content %}

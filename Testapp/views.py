@@ -1,19 +1,21 @@
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render,redirect
-from pytube import YouTube
+from pytube import YouTube , Stream, monostate
 # Create your views here.
 def home(request):
     return render(request,'index.html')
 
+
+
 def submit(request):
     url = request.GET['inp']
     url2 =url[32:]
-    obj = YouTube(url)
+    video = YouTube(url)
 
-    streams = obj.streams.filter(progressive=True)
+    video_type = video.streams.filter(progressive=True,file_extension='mp4')
     res = []
-    for x in streams:
+    for x in video_type:
         res.append(x.resolution)
     res = list(dict.fromkeys(res))
     
@@ -25,14 +27,17 @@ def submit(request):
         'url2':url2,   
          }
     return render(request,'submit.html',context)
+import os
 def download(request,pixel):
+    home = os.path.expanduser('~')
+    download_path = os.path.join(home, 'Downloads')
     #SAVE_PATH = "C:/" #to_dopath = 'C:/downloads'
     num = pixel.find('p')
     num = num+1
-
+ 
     pi = pixel[:num]
     val = pixel[num:]
-
+    video = None
     #print(type(stream))
     #stream.download()
     #print('Successfully Downloaded')
@@ -41,16 +46,16 @@ def download(request,pixel):
     try:
 	# object creation using YouTube
 	# which was imported in the beginning
-	    yt = YouTube(strg)
+	    video = YouTube(strg)
         
     except:
 	    print("Connection Error") #to handle exception
 
 # filters out all the files with "mp4" extension
     #mp4files = yt.streams.filter('mp4')
+    video_type = video.streams.filter(progressive=True,file_extension='mp4')
 
-
-    stream =yt.streams.get_by_resolution(pi)
+    stream =video.streams.get_by_resolution(pi)
 
     try:
 	# downloading the video
@@ -60,17 +65,29 @@ def download(request,pixel):
             return redirect('home')
         else:
             
-	        stream.download("C:/Videos/")
+	        stream.download(download_path)
     except:
 	    print("Some Error!")
 
     print('Task Completed!')
     print(type(stream))
-
+    context={
+       'saver':download_path
+    }
     return render(request,'done.html')
-
-def test(request):
-    myVideo = YouTube("https://www.youtube.com/watch?v=OTCuykFHBeA")
-    myVideo.streams.first().download("C:/Videos/")
+import os
+def test(request): 
+    home = os.path.expanduser('~')
+    download_path = os.path.join(home, 'Downloads')
+    
+    strg ="https://www.youtube.com/watch?v=OTCuykFHBeA"
+    val = strg[32:]
+    myVideo = YouTube(strg)
+   
+    vid =myVideo.streams.first().download(download_path)
+    
+    
     print(myVideo.title)
+    print('.............................')
+    print(download_path)
     return redirect('home')

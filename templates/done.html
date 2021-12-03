@@ -3,8 +3,8 @@
 {% block content %}
 
 <div class="jumbotron">
-    <h3 class="display-4">Your video has been downloaded in the C:/Videos/ path ,thanks for using us</h3>
-    p
+    <h3 class="display-4">Your video has been downloaded in the {{saver}} path ,thanks for using us</h3>
+    <p class="lead">Click Here To Use again <a href="{% url 'home' %}">Click Here</a></p>
     </div>
 
 {% endblock content %}
